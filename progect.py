@@ -54,6 +54,7 @@ def counts_combinations(dim: int = 3) -> tuple[set[int]]:
     step_row = 0
     step_col = 0
 
+    # КОММЕНТАРИЙ: в один цикл — одобряю!
     for _ in range(dim):
         set_row = set(list_ref[step_row:dim+step_row])
         list_com.append(set_row)
