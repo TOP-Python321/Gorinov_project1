@@ -2,6 +2,14 @@
 Глобальные переменные и константы.
 """
 
+# стандартная библиотека
+from pathlib import Path
+
+
+PLAYERS_PATH = Path(r'..\data\players.ini')
+SAVES_PATH = Path(r'..\data\saves.txt')
+
+
 PROMPT = ' > '
 
 
@@ -14,3 +22,5 @@ COMMANDS = {
     'изменить размер поля': ('dim', 'd', 'размер', 'р'),
     'выйти': ('quit', 'q', 'выход', 'в')
 }
+
+players_db: dict[str, dict[str, int]] = {}
