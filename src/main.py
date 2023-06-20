@@ -8,13 +8,18 @@
 import data
 import help
 import utils
+import player
 
 #1. Чтение файлов данных.
 
 # 2. ЕСЛИ первый запуск:
 if utils.read_players():
     ...
-    # вывод раздела помощи
+    # вывод титров
+
+
+# 3. Запрос имени игрока
+player.get_players_name()
 
 
 # суперцикл
