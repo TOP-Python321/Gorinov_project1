@@ -4,13 +4,14 @@
 
 # стандартная библиотека
 from configparser import ConfigParser
-from pathlib import Path
+from re import compile
 
 # проект
 import data
 
 
-def read_players() -> dict[str, dict[str, int]] | bool:
+def read_players() -> bool:
+    """Возвращает True, если в файле игроков есть хотя бы одина запись, иначе Folse. """
     config = ConfigParser()
     config.read(data.PLAYERS_PATH)
     config = {
@@ -22,4 +23,11 @@ def read_players() -> dict[str, dict[str, int]] | bool:
     }
     data.players_db = config
     return bool(config)
+
+
+def write_players() -> None:
+    # !!!написать!!!
+    ...
+
+
 
