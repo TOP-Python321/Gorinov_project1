@@ -11,6 +11,10 @@ SAVES_PATH = Path(r'..\data\saves.txt')
 
 
 PROMPT = ' > '
+MESSAGES = {
+    'ввод имени': 'введите имя игрока',
+    'некорректное имя': 'имя игрока должно начинаться с буквы, содержать только буквы, цифры и сивол подчеркивания'
+}
 
 
 COMMANDS = {
@@ -23,4 +27,13 @@ COMMANDS = {
     'выйти': ('quit', 'q', 'выход', 'в')
 }
 
+
+NAME_PATTERN = compile(r'[A-Za-zА-ЯЁа-яё][A-Za-zА-ЯЁа-яё\d_]+')
+
+
 players_db: dict[str, dict[str, int]] = {}
+
+
+TOKENS = ('X', '0')
+players: list[str] = []
+
