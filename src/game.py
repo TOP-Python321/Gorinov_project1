@@ -11,10 +11,10 @@ def get_human_turn() -> int | None:
             return None
         try:
             turn = int(turn)
-        except ValueError
+        except ValueError:
             pass
         else:
-            if 1<= turn < data.all_cells:
+            if 1 <= turn < data.all_cells:
                 if turn not in data.turns:
                     return turn
 
@@ -25,15 +25,13 @@ def game() -> list[str] | None:
     for t in range(len(data.turns), data.all_cells):
         o = t % 2
 
+        # data.TOKENS[o]
+        # data.players[o]
+
         turn = get_human_turn()
         if turn is None:
             # save_game()
             return None
-
-        # data.TOKENS[o]
-        # data.players[o]
-
-
     else:
         # ничья
         return []
