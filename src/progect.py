@@ -6,14 +6,16 @@ def generator_template(dim: int = 3) -> str:
     width_num = 4
 
     # КОММЕНТАРИЙ: генераторные выражения во вложенных join() удобнее хотя бы тем, что после их работы не нужно обрезать лишние символы — в то время, как у вас выполняется довольно много действий, без которых можно было бы обойтись
+    # постараюсь доработать в ходе проекта
     for _ in range(dim):
         strs = ''
         for _ in range(dim):
             # ИСПРАВИТЬ: почему бы не записать это в один литерал — в чём магия?
-            strs += ' {}' + ' |'
+            # между литералами еще что -то записывал и не исправил строку
+            strs += ' {} |'
         # ИСПРАВИТЬ: не слишком хорошо, что в строчке с ходами у вас на один пробел меньше
-        field.append(strs.rstrip(' | ') + '\n')
-        col_sep = '—' * (width_num*dim - 1) + '\n'
+        field.append(strs.rstrip('|'))
+        col_sep = '\n' + '—' * (width_num*dim - 1) + '\n'
         field_out = col_sep.join(field)
 
     # ИСПРАВИТЬ: в конце итоговой строки лишний \n
@@ -34,10 +36,10 @@ def output_coordinates(dim: int = 3) -> str:
         for _ in range(dim):
             str_lin = str(count)
             # ИСПРАВИТЬ: пробел является заполнителем по умолчанию, поэтому может быть опущен в f-строке
-            strs += ' ' f"{str_lin: ^{width_num}}" + ' |'
+            strs += ' ' f"{str_lin:^{width_num}}" + ' |'
             count += 1
-        field.append(strs.rstrip(' | ') + '\n')
-        col_sep = '—' * ((width_num + 3)*dim - 1) + '\n'
+        field.append(strs.rstrip('|'))
+        col_sep = '\n' + '—' * ((width_num + 3)*dim - 1) + '\n'
         field_out = col_sep.join(field)
 
     return field_out
