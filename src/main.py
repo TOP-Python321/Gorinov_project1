@@ -9,6 +9,7 @@ import data
 import help
 import utils
 import player
+import game
 
 #1. Чтение файлов данных.
 
@@ -28,10 +29,16 @@ while True:
     command = input(data.PROMPT)
 
     if command in data.COMMANDS['начать новую партию']:
-        ...
+        result = game.game()
+        if result is not None:
+            player.update_stats(result)
 
     elif command in data.COMMANDS['загрузить существующую партию']:
-        ...
+        # game.load()
+        result = game.game()
+        if result is not None:
+            player.update_stats(result)
+
 
     elif command in data.COMMANDS['отобразить раздел помощи']:
         ...
