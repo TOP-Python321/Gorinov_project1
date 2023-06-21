@@ -4,6 +4,7 @@
 
 # стандартная библиотека
 from pathlib import Path
+from re import compile
 
 
 PLAYERS_PATH = Path(r'..\data\players.ini')
@@ -29,7 +30,6 @@ COMMANDS = {
 
 
 NAME_PATTERN = compile(r'[A-Za-zА-ЯЁа-яё][A-Za-zА-ЯЁа-яё\d_]+')
-
 
 players_db: dict[str, dict[str, int]] = {}
 saves_db: dict[tuple[str, str], dict] = {}
