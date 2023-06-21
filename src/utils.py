@@ -4,7 +4,8 @@
 
 # стандартная библиотека
 from configparser import ConfigParser
-from re import compile
+import configparser
+
 
 # проект
 import data
@@ -13,11 +14,11 @@ import data
 def read_players() -> bool:
     """Возвращает True, если в файле игроков есть хотя бы одина запись, иначе Folse. """
     config = ConfigParser()
-    config.read(data.PLAYERS_PATH)
+    config.read(data.PLAYERS_PATH, encoding="utf-8")
     config = {
         player_name: {
             key: int(value)
-            for key, value in config[player_name].item()
+            for key, value in config[player_name].items()
         }
         for player_name in config.sections()
     }
@@ -26,8 +27,13 @@ def read_players() -> bool:
 
 
 def write_players() -> None:
-    # !!!написать!!!
-    ...
+    """
+    Перезаписывает файл players.ini.
+    :return:Nane
+    """
+    config = ConfigParser()
+    for elem in data.players_db:
+        config[elem] = {key: value for key, value in data.players_db[elem].items()}
 
-
-
+    with open(data.PLAYERS_PATH, "w", encoding="utf-8") as configfile:
+        config.write(configfile)
