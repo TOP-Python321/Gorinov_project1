@@ -22,3 +22,15 @@ def get_players_name() -> None:
         # !!!написать вывод помощи!!!
         # help.full()
     data.players += [name]
+
+
+def update_stats(players: list[str]):
+    if not players:
+        for name in data.players:
+            data.players_db[name]['ничьих'] += 1
+    else:
+        winner, looser = players
+        data.players_db[winner]['побед'] += 1
+        data.players_db[looser]['поражений'] += 1
+
+
