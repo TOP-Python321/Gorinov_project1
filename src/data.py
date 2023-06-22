@@ -6,6 +6,8 @@
 from pathlib import Path
 from re import compile
 
+# проект
+import utils
 
 PLAYERS_PATH = Path(r'..\data\players.ini')
 SAVES_PATH = Path(r'..\data\saves.txt')
@@ -44,3 +46,12 @@ TOKENS = ('X', '0')
 players: list[str] = []
 
 turns: dict[int] = {}
+
+# выигрышные комбинации
+winning_combinations = utils.counts_combinations(dim)
+
+# словарь координат игрового поля c пробелами
+field_coordinates = dict.fromkeys(range(1, all_cells + 1), ' ')
+
+# шаблон игрового поля
+field_template = utils.generator_template(dim)
