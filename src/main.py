@@ -27,9 +27,12 @@ player.get_players_name()
 # суперцикл
 while True:
     # 4. Ожидание команды ввода
-    command = input(data.PROMPT)
+    command = input(f"{data.MESSAGES['команда']}{data.PROMPT}")
 
     if command in data.COMMANDS['начать новую партию']:
+        # 5 запрос режима игры
+        game.game_mode()
+
         result = game.game()
         if result is not None:
             player.update_stats(result)
