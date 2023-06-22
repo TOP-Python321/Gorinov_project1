@@ -2,6 +2,7 @@
 Настройка партии и игровой процесс.
 """
 import data
+import player
 
 
 def get_human_turn() -> int | None:
@@ -35,3 +36,16 @@ def game() -> list[str] | None:
     else:
         # ничья
         return []
+
+
+def game_mode() -> None:
+    """
+    Запрашивает режим игры. Если введена пустая строка возвращает None, иначе True.
+    """
+    inp = input(f"{data.MESSAGES['режим игры']}{data.PROMPT}")
+    if inp:
+        player.get_players_name()
+    else:
+        # !!!здесь будет добавление бота !!!
+        print('игра с ботом')
+
