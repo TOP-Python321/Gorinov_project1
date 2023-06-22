@@ -15,7 +15,7 @@ def get_human_turn() -> int | None:
         except ValueError:
             pass
         else:
-            if 1 <= turn < data.all_cells:
+            if 1 <= turn <= data.all_cells:
                 if turn not in data.turns:
                     return turn
 
@@ -26,13 +26,19 @@ def game() -> list[str] | None:
     for t in range(len(data.turns), data.all_cells):
         o = t % 2
 
-        # data.TOKENS[o]
-        # data.players[o]
-
         turn = get_human_turn()
         if turn is None:
             # save_game()
             return None
+        data.turns[turn] = data.TOKENS[o]
+        data.field_coordinates = data.field_coordinates | data.turns
+        print(data.field_template.format(*data.field_coordinates.values()))
+        if (
+                set(tuple(data.turns)[::2]) in data.winning_combinations or
+                set(tuple(data.turns)[1::2]) in data.winning_combinations
+        ):
+            print(f'выиграл игрок {data.players[o]}')
+
     else:
         # ничья
         return []
@@ -40,7 +46,8 @@ def game() -> list[str] | None:
 
 def game_mode() -> None:
     """
-    Запрашивает режим игры. Если введена пустая строка возвращает None, иначе True.
+    Запрашивает режим игры. Если введена пустая строка добавляет бота как второго игрока, иначе запрашивает имя второго
+    игрока.
     """
     inp = input(f"{data.MESSAGES['режим игры']}{data.PROMPT}")
     if inp:
