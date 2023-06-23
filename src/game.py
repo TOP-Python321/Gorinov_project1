@@ -3,6 +3,7 @@
 """
 import data
 import player
+import utils
 
 
 def get_human_turn() -> int | None:
@@ -28,7 +29,7 @@ def game() -> list[str] | None:
 
         turn = get_human_turn()
         if turn is None:
-            # save_game()
+            utils.save_game()
             return None
         data.turns[turn] = data.TOKENS[o]
         print(data.field_template.format(*(data.field_coordinates | data.turns).values()))
@@ -57,4 +58,3 @@ def game_mode() -> None:
     else:
         # !!!здесь будет добавление бота !!!
         print('игра с ботом')
-
