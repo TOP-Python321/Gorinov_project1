@@ -33,6 +33,9 @@ while True:
         # 5 запрос режима игры
         game.game_mode()
 
+        # 8. запрос очерёдности ходов
+        player.turn_order(input(f"{data.MESSAGES['очередь']} {data.players[1]}{data.PROMPT}"))
+
         result = game.game()
         if result is not None:
             player.update_stats(result)
