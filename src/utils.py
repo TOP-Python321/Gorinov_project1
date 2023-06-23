@@ -110,3 +110,9 @@ def generator_template(dim: int) -> str:
 
     # ИСПРАВИТЬ: в конце итоговой строки лишний \n
     return field_out
+
+
+def save_game() -> None:
+    """Сохраняет текущую партию в data.saves_db"""
+    data.saves_db[tuple(data.players)] = dict(zip(('dim', 'turns'), (data.dim, data.turns)))
+
