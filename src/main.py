@@ -36,6 +36,8 @@ while True:
         result = game.game()
         if result is not None:
             player.update_stats(result)
+        # сохранение данных в players.ini
+        utils.write_players()
 
     elif command in data.COMMANDS['загрузить существующую партию']:
         # game.load()
