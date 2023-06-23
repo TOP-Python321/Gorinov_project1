@@ -40,3 +40,12 @@ def update_stats(players: list[str]):
     else:
         data.players_db[players[0]]['побед'] += 1
         data.players_db[players[1]]['поражений'] += 1
+
+
+def turn_order(inp: str) -> None:
+    """
+    Принимает строку. Переворачивает список data.players, если введена не пустая строка.
+    """
+    if inp:
+        data.players.reverse()
+
