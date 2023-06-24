@@ -58,3 +58,15 @@ def game_mode() -> None:
     else:
         # !!!здесь будет добавление бота !!!
         print('игра с ботом')
+
+
+def load(players: tuple[str, str], save: dict) -> None:
+    """
+    !!!Дописать!!!
+    :param players:
+    :param save:
+    :return:
+    """
+    data.players = list(players)
+    data.turns = save['turns']
+    utils.change_dim(save['dim'])
