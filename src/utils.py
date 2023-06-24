@@ -39,6 +39,44 @@ def write_players() -> None:
         config.write(configfile)
 
 
+def read_save() -> None:
+    """
+    Записывает в data.saves_db данные полученные из файла saves.txt.
+    """
+    saves = data.SAVES_PATH.read_text(encoding='utf-8').split('\n')
+    for save in saves:
+        players, turns, dim = save.split('!')
+        data.saves_db |= {
+            tuple(players.split(',')): {
+                'dim': int(dim),
+                'turns': {
+                    int(turn): data.TOKENS[i % 2]
+                    for i, turn in enumerate(turns.split(','))
+                },
+            }
+        }
+
+
+def change_dim(new_dim: int) -> None:
+    """
+    Принимает int объект и перезаписывает переменные data.dim, data.dim_range, data.all_cell = new_dim**2.
+    """
+    data.dim = new_dim
+    data.dim_range = range(new_dim)
+    data.all_cell = new_dim**2
+
+
+def dim_input() -> int:
+    """
+    Запрашивает число и проверяет ввод на соответствие шаблону, передает число как объект int.
+    """
+    while True:
+        dim = input(f" {data.MESSAGES['ввод размерности']}{data.PROMPT}")
+        if data.DIM_PATTERN.fullmath(dim):
+            return int(dim)
+        print(f" {data.MESSAGES['некорректная размерность']} ")
+
+
 def counts_combinations(dim: int) -> tuple[set[int]]:
     """Генерирует  и возвращает кортеж , который содержит множества выигрышных комбинаций.
 
@@ -115,4 +153,3 @@ def generator_template(dim: int) -> str:
 def save_game() -> None:
     """Сохраняет текущую партию в data.saves_db"""
     data.saves_db[tuple(data.players)] = dict(zip(('dim', 'turns'), (data.dim, data.turns)))
-
