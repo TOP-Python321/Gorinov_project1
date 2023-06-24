@@ -49,3 +49,25 @@ def turn_order(inp: str) -> None:
     if inp:
         data.players.reverse()
 
+
+def search_saves() -> list[tuple, dict]:
+    list_saves = []
+    count = 1
+    for elem in data.saves_db:
+        if data.players[0] in elem:
+            list_saves.append(elem)
+            print(f'{count}. {elem}')
+            count += 1
+
+    if list_saves:
+        while True:
+            # !!!переписить input!!!
+            inp = input(f"введите номер партии, который желаете загрузить")
+            try:
+                inp = int(inp)
+            except ValueError:
+                pass
+            else:
+                if 1 <= inp <= count - 1:
+                    # !!!добавить переменную!!!
+                    return [list_saves[inp - 1], data.saves_db[list_saves[inp - 1]]]
