@@ -4,7 +4,6 @@
 
 # стандартная библиотека
 
-
 # проект
 import data
 import help
@@ -12,17 +11,15 @@ import utils
 import player
 import game
 
-#1. Чтение файлов данных.
 
+# 1. Чтение файлов данных.
 # 2. ЕСЛИ первый запуск:
 if not utils.read_players():
     print('Игра ХО')
     # вывод титров
 
-
 # 3. Запрос имени игрока
 player.get_players_name()
-
 
 # суперцикл
 while True:
@@ -48,7 +45,6 @@ while True:
         if result is not None:
             player.update_stats(result)
 
-
     elif command in data.COMMANDS['отобразить раздел помощи']:
         ...
 
@@ -65,5 +61,6 @@ while True:
         break
 
     # !!!отобразить раздел помощи при вводе неправильной команды!!!
+    # КОММЕНТАРИЙ: да, но желательно не весь — при вводе неправильной команды информация, например, о правилах игры не сильно поможет
 
 # 16. обработка завершения приложения
