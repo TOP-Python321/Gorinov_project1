@@ -31,6 +31,7 @@ def get_players_name() -> None:
         # !!!написать вывод помощи!!!
         # help.full()
     data.players += [name]
+    data.authorized = data.players[0]
 
 
 def update_stats(players: list[str]):
@@ -40,6 +41,8 @@ def update_stats(players: list[str]):
     else:
         data.players_db[players[0]]['побед'] += 1
         data.players_db[players[1]]['поражений'] += 1
+    data.players = [data.authorized]
+    data.turns = {}
 
 
 def turn_order(inp: str) -> None:
@@ -50,24 +53,40 @@ def turn_order(inp: str) -> None:
         data.players.reverse()
 
 
-def search_saves() -> list[tuple, dict]:
+def player_search(player: str) -> bool:
+    """
+    Принимает имя игрока в виде объекта str. Возвращает TRUE если имя есть в списке data.saves_db,
+    иначе возвращает Folse
+    :return: bool
+    """
+    for elems in data.saves_db:
+        for elem in elems:
+            if player in elem:
+                return bool(True)
+
+    print(f'У игрока {player} нет загруженных партий')
+    return bool(False)
+
+
+def search_saves() -> list[tuple[str, str], dict]:
+    """
+    Запрашивае у игрока пртию, которую необходимо загрузить. Возвращает список из кортежа игроков и списка сделанных ходов.
+    """
     list_saves = []
     count = 1
     for elem in data.saves_db:
-        if data.players[0] in elem:
+        if data.authorized in elem:
             list_saves.append(elem)
             print(f'{count}. {elem}')
             count += 1
 
     if list_saves:
         while True:
-            # !!!переписить input!!!
-            inp = input(f"введите номер партии, который желаете загрузить")
+            inp = input(f"{data.MESSAGES['номер партии']} {data.PROMPT}")
             try:
                 inp = int(inp)
             except ValueError:
                 pass
             else:
                 if 1 <= inp <= count - 1:
-                    # !!!добавить переменную!!!
-                    return [list_saves[inp - 1], data.saves_db[list_saves[inp - 1]]]
+                    return [save := list_saves[inp - 1], data.saves_db[save]]
