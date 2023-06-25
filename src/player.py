@@ -2,6 +2,7 @@
 Работа с данными игроков.
 """
 import data
+import game
 import utils
 
 
@@ -41,8 +42,8 @@ def update_stats(players: list[str]):
     else:
         data.players_db[players[0]]['побед'] += 1
         data.players_db[players[1]]['поражений'] += 1
-    data.players = [data.authorized]
-    data.turns = {}
+    # подготовка списка к следующей партии
+    game.clear()
 
 
 def turn_order(inp: str) -> None:
@@ -70,7 +71,8 @@ def player_search(player: str) -> bool:
 
 def search_saves() -> list[tuple[str, str], dict]:
     """
-    Запрашивае у игрока пртию, которую необходимо загрузить. Возвращает список из кортежа игроков и списка сделанных ходов.
+    Запрашивае у игрока пртию, которую необходимо загрузить. Возвращает список из кортежа игроков и
+    списка сделанных ходов.
     """
     list_saves = []
     count = 1
