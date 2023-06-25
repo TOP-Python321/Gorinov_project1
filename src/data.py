@@ -43,6 +43,8 @@ DIM_PATTERN = compile(r'[3-9]|1[0-9]|20')
 players_db: dict[str, dict[str, int]] = {}
 saves_db: dict[tuple[str, str], dict] = {}
 
+authorized: str
+
 dim: int = 3
 dim_range = range(dim)
 all_cells: int = dim**2
