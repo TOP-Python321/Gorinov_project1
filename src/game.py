@@ -21,10 +21,14 @@ def get_human_turn() -> int | None:
                     return turn
 
 
-def game() -> list[str] | None:
+def game(flag: bool = False) -> list[str] | None:
     """Контроллер игрового процесса."""
 
     for t in range(len(data.turns), data.all_cells):
+        # добавил вывод игрового поля, т.к. при загрузке существующей партии неизвестно какие поля заняты без вывода игрового поля
+        if flag:
+            print(data.field_template.format(*(data.field_coordinates | data.turns).values()))
+            flag = False
         o = t % 2
 
         turn = get_human_turn()
@@ -37,13 +41,13 @@ def game() -> list[str] | None:
                 set(tuple(data.turns)[::2]) in data.winning_combinations or
                 set(tuple(data.turns)[1::2]) in data.winning_combinations
         ):
-            print(f'выиграл игрок {data.players[o]}')
-            result_players = data.players[:]
+            print(f"{data.MESSAGES['выигрыш']} {data.players[o]}")
             if data.players[o] != data.players[0]:
-                result_players.reverse()
-            return result_players
+                data.players.reverse()
+            return data.players
     else:
         # ничья
+        print(f"{data.MESSAGES['ничья']}")
         return []
 
 
@@ -62,10 +66,7 @@ def game_mode() -> None:
 
 def load(players: tuple[str, str], save: dict) -> None:
     """
-    !!!Дописать!!!
-    :param players:
-    :param save:
-    :return:
+    Перезаписывает переменные необходимые для игрового процесса принятыми аргументами.
     """
     data.players = list(players)
     data.turns = save['turns']
