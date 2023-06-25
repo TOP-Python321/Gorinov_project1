@@ -13,6 +13,8 @@ import game
 
 
 # 1. Чтение файлов данных.
+utils.read_save()
+
 # 2. ЕСЛИ первый запуск:
 if not utils.read_players():
     print('Игра ХО')
@@ -39,11 +41,14 @@ while True:
         # сохранение данных в players.ini
         utils.write_players()
 
+
     elif command in data.COMMANDS['загрузить существующую партию']:
-        # game.load()
-        result = game.game()
-        if result is not None:
-            player.update_stats(result)
+        if player.player_search(data.authorized):
+            game.load(*player.search_saves())
+            result = game.game(True)
+            if result is not None:
+                player.update_stats(result)
+            utils.write_players()
 
     elif command in data.COMMANDS['отобразить раздел помощи']:
         ...
@@ -58,6 +63,7 @@ while True:
         ...
 
     elif command in data.COMMANDS['выйти']:
+        utils.write_saves()
         break
 
     # !!!отобразить раздел помощи при вводе неправильной команды!!!
