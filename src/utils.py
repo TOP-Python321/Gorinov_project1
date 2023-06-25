@@ -57,6 +57,20 @@ def read_save() -> None:
         }
 
 
+def write_saves() -> None:
+    """
+     Записывает незавершенные партии в файл saves.txt
+    """
+    texts = ''
+    for key in data.saves_db:
+        text = '!'.join([','.join(str(i) for i in key), ','.join(str(elem) for elem in data.saves_db[key]['turns']),
+                         str(data.saves_db[key]['dim'])]) + '\n'
+        texts += text
+
+    with open(data.SAVES_PATH, "w", encoding="utf-8") as file:
+        file.write(texts.rstrip('\n'))
+
+
 def change_dim(new_dim: int) -> None:
     """
     Принимает int объект и перезаписывает переменные data.dim, data.dim_range, data.all_cell = new_dim**2.
