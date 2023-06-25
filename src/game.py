@@ -25,7 +25,8 @@ def game(flag: bool = False) -> list[str] | None:
     """Контроллер игрового процесса."""
 
     for t in range(len(data.turns), data.all_cells):
-        # добавил вывод игрового поля, т.к. при загрузке существующей партии неизвестно какие поля заняты без вывода игрового поля
+        # добавил вывод игрового поля, т.к. при загрузке существующей партии неизвестно какие поля заняты без
+        # вывода игрового поля
         if flag:
             print(data.field_template.format(*(data.field_coordinates | data.turns).values()))
             flag = False
@@ -33,7 +34,10 @@ def game(flag: bool = False) -> list[str] | None:
 
         turn = get_human_turn()
         if turn is None:
+            # сохранение незавершенной партии
             utils.save_game()
+            data.players = [data.authorized]
+            data.turns = {}
             return None
         data.turns[turn] = data.TOKENS[o]
         print(data.field_template.format(*(data.field_coordinates | data.turns).values()))
@@ -42,9 +46,10 @@ def game(flag: bool = False) -> list[str] | None:
                 set(tuple(data.turns)[1::2]) in data.winning_combinations
         ):
             print(f"{data.MESSAGES['выигрыш']} {data.players[o]}")
+            copy_players = data.players[:]
             if data.players[o] != data.players[0]:
-                data.players.reverse()
-            return data.players
+                copy_players.reverse()
+            return copy_players
     else:
         # ничья
         print(f"{data.MESSAGES['ничья']}")
@@ -71,3 +76,12 @@ def load(players: tuple[str, str], save: dict) -> None:
     data.players = list(players)
     data.turns = save['turns']
     utils.change_dim(save['dim'])
+
+
+def clear() -> None:
+    """
+    Подготавливает переменные к следующей партии. Удаляет доигранную партию из data.saves_db, если она там есть.
+    """
+    data.saves_db.pop(tuple(data.players), None)
+    data.players = [data.authorized]
+    data.turns = {}
