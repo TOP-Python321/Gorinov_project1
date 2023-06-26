@@ -41,7 +41,6 @@ while True:
         # сохранение данных в players.ini
         utils.write_players()
 
-
     elif command in data.COMMANDS['загрузить существующую партию']:
         if player.player_search(data.authorized):
             game.load(*player.search_saves())
@@ -60,7 +59,7 @@ while True:
         ...
 
     elif command in data.COMMANDS['изменить размер поля']:
-        ...
+        utils.change_dim(utils.dim_input())
 
     elif command in data.COMMANDS['выйти']:
         utils.write_saves()
