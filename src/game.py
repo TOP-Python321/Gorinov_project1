@@ -41,15 +41,15 @@ def game(flag: bool = False) -> list[str] | None:
             return None
         data.turns[turn] = data.TOKENS[o]
         print(data.field_template.format(*(data.field_coordinates | data.turns).values()))
-        if (
-                set(tuple(data.turns)[::2]) in data.winning_combinations or
-                set(tuple(data.turns)[1::2]) in data.winning_combinations
-        ):
-            print(f"{data.MESSAGES['выигрыш']} {data.players[o]}")
-            copy_players = data.players[:]
-            if data.players[o] != data.players[0]:
-                copy_players.reverse()
-            return copy_players
+        for elem in data.winning_combinations:
+            if (elem <= set(tuple(data.turns)[::2]) or
+                elem <= set(tuple(data.turns)[1::2])
+            ):
+                print(f"{data.MESSAGES['выигрыш']} {data.players[o]}")
+                copy_players = data.players[:]
+                if data.players[o] != data.players[0]:
+                    copy_players.reverse()
+                return copy_players
     else:
         # ничья
         print(f"{data.MESSAGES['ничья']}")
