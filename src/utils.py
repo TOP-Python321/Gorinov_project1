@@ -44,17 +44,18 @@ def read_save() -> None:
     Записывает в data.saves_db данные полученные из файла saves.txt.
     """
     saves = data.SAVES_PATH.read_text(encoding='utf-8').split('\n')
-    for save in saves:
-        players, turns, dim = save.split('!')
-        data.saves_db |= {
-            tuple(players.split(',')): {
-                'dim': int(dim),
-                'turns': {
-                    int(turn): data.TOKENS[i % 2]
-                    for i, turn in enumerate(turns.split(','))
-                },
+    if ''.join(saves):
+        for save in saves:
+            players, turns, dim = save.split('!')
+            data.saves_db |= {
+                tuple(players.split(',')): {
+                    'dim': int(dim),
+                    'turns': {
+                        int(turn): data.TOKENS[i % 2]
+                        for i, turn in enumerate(turns.split(','))
+                    },
+                }
             }
-        }
 
 
 def write_saves() -> None:
@@ -77,7 +78,13 @@ def change_dim(new_dim: int) -> None:
     """
     data.dim = new_dim
     data.dim_range = range(new_dim)
-    data.all_cell = new_dim**2
+    data.all_cells = new_dim**2
+    # выигрышные комбинации
+    data.winning_combinations = counts_combinations(new_dim)
+    # словарь координат игрового поля c пробелами
+    data.field_coordinates = dict.fromkeys(range(1, data.all_cells + 1), ' ')
+    # шаблон игрового поля
+    data.field_template = generator_template(new_dim)
 
 
 def dim_input() -> int:
@@ -86,7 +93,7 @@ def dim_input() -> int:
     """
     while True:
         dim = input(f" {data.MESSAGES['ввод размерности']}{data.PROMPT}")
-        if data.DIM_PATTERN.fullmath(dim):
+        if data.DIM_PATTERN.fullmatch(dim):
             return int(dim)
         print(f" {data.MESSAGES['некорректная размерность']} ")
 
