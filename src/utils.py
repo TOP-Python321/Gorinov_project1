@@ -82,9 +82,9 @@ def change_dim(new_dim: int) -> None:
     # выигрышные комбинации
     data.winning_combinations = counts_combinations(new_dim)
     # словарь координат игрового поля c пробелами
-    data.field_coordinates = dict.fromkeys(range(1, data.all_cells + 1), ' ')
+    data.board = dict.fromkeys(range(1, data.all_cells + 1), ' ')
     # шаблон игрового поля
-    data.field_template = generator_template(new_dim)
+    data.field = field_template()
 
 
 def dim_input() -> int:
@@ -147,28 +147,21 @@ def output_coordinates(dim: int) -> str:
     return field_out
 
 
-def generator_template(dim: int) -> str:
+def field_template(data_width: int = None) -> str:
     """
-    Генерирует и возвращает строку шаблона игрового поля. Размерность игрового поля указывается в аргументе dim.
+    Генерирует и возвращает строку шаблона игрового поля.
+    :param data_width: указывается максимальная длина элемента. Без аргумента возвращает шаблон для игрового полля, при
+    указании аргумента выводит шаблон для координат игрового поля.
+    :return: str
     """
-    field = []
-    width_num = 4
-
-    # КОММЕНТАРИЙ: генераторные выражения во вложенных join() удобнее хотя бы тем, что после их работы не нужно обрезать лишние символы — в то время, как у вас выполняется довольно много действий, без которых можно было бы обойтись
-    # постараюсь доработать в ходе проекта
-    for _ in range(dim):
-        strs = ''
-        for _ in range(dim):
-            # ИСПРАВИТЬ: почему бы не записать это в один литерал — в чём магия?
-            # между литералами еще что -то записывал и не исправил строку
-            strs += ' {} |'
-        # ИСПРАВИТЬ: не слишком хорошо, что в строчке с ходами у вас на один пробел меньше
-        field.append(strs.rstrip('|'))
-        col_sep = '\n' + '—' * (width_num*dim - 1) + '\n'
-        field_out = col_sep.join(field)
-
-    # ИСПРАВИТЬ: в конце итоговой строки лишний \n
-    return field_out
+    if data_width is None:
+        field_width = data.dim * (3 + max(len(t) for t in data.TOKENS)) - 1
+    else:
+        field_width = data.dim * (3 + data_width) - 1
+    v_sep, h_sep = '|', '—'
+    v_sep = v_sep.join([' {} '] * data.dim)
+    h_sep = f'\n{h_sep * field_width}\n'
+    return h_sep.join([v_sep] * data.dim)
 
 
 def save_game() -> None:
