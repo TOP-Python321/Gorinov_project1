@@ -23,12 +23,13 @@ def get_human_turn() -> int | None:
 
 def game(flag: bool = False) -> list[str] | None:
     """Контроллер игрового процесса."""
-
+    data.field = utils.field_template()
+    data.winning_combinations = utils.counts_combinations(data.dim)
     for t in range(len(data.turns), data.all_cells):
         # добавил вывод игрового поля, т.к. при загрузке существующей партии неизвестно какие поля заняты без
         # вывода игрового поля
         if flag:
-            print(data.field_template.format(*(data.field_coordinates | data.turns).values()))
+            print(data.field.format(*(data.board | data.turns).values()))
             flag = False
         o = t % 2
 
@@ -40,7 +41,7 @@ def game(flag: bool = False) -> list[str] | None:
             data.turns = {}
             return None
         data.turns[turn] = data.TOKENS[o]
-        print(data.field_template.format(*(data.field_coordinates | data.turns).values()))
+        print(data.field.format(*(data.board | data.turns).values()))
         for elem in data.winning_combinations:
             if (elem <= set(tuple(data.turns)[::2]) or
                 elem <= set(tuple(data.turns)[1::2])
