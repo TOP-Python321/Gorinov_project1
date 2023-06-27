@@ -19,9 +19,10 @@ def name_input() -> str:
         print(f'{data.MESSAGES["некорректное имя"]}')
 
 
-def get_players_name() -> None:
+def get_players_name(flag: bool = False) -> None:
     """
     Запрашивает имя игрока. Если имени нет в базе игроков, то добавляет имя в базу игроков и обновляет файлы данных.
+    :param flag: При передаче в качестве аргумента True меняет запустившего игру игрока на нового игрока.
     :return: None
     """
     name = name_input()
@@ -31,8 +32,12 @@ def get_players_name() -> None:
         utils.write_players()
         # !!!написать вывод помощи!!!
         # help.full()
-    data.players += [name]
-    data.authorized = data.players[0]
+    if flag:
+        data.players = [name]
+        data.authorized = [name]
+    else:
+        data.players += [name]
+        data.authorized = data.players[0]
 
 
 def update_stats(players: list[str]):
