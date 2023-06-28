@@ -12,6 +12,8 @@ from re import compile
 PLAYERS_PATH = Path(r'..\data\players.ini')
 SAVES_PATH = Path(r'..\data\saves.txt')
 
+DEBUG = False
+debug_data = {}
 
 PROMPT = ' > '
 MESSAGES = {
