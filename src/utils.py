@@ -187,3 +187,26 @@ def concatenate_rows(
         padding.join(row)
         for row in zip(*matrices)
     )
+
+
+def table_result() -> None:
+    """Выводит в stdout таблицу статистики игроков"""
+    list_columns = ['Игрок', 'Побед', 'Поражений', 'Ничьих']
+    list_elem = []
+    for key in data.players_db.values():
+        list_elem.append(key)
+        for elem in key:
+            list_elem.append(elem)
+    width = max(len(i) for i in list_elem)
+
+    columns = ''.join(f"{column:<{width +5}}" for column in list_columns)
+    separator = f"{'=' * (width+5) * 4}"
+    list_str = []
+
+    for key, val in data.players_db.items():
+        list_line = ''
+        for elem in val.values():
+            list_line += f"{elem:<{width +5}}"
+        list_str += [f"{key:<{width +5}}" + list_line + '\n']
+
+    print(f'\n{columns}\n'f'{separator}\n'f"{''.join(list_str)}")

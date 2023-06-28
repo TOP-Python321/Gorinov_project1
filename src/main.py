@@ -56,7 +56,7 @@ while True:
         player.get_players_name(True)
 
     elif command in data.COMMANDS['отобразить таблицу результатов']:
-        ...
+        utils.table_result()
 
     elif command in data.COMMANDS['изменить размер поля']:
         utils.change_dim(utils.dim_input())
