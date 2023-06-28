@@ -167,3 +167,23 @@ def field_template(data_width: int = None) -> str:
 def save_game() -> None:
     """Сохраняет текущую партию в data.saves_db"""
     data.saves_db[tuple(data.players)] = dict(zip(('dim', 'turns'), (data.dim, data.turns)))
+
+
+def concatenate_rows(
+        matrix1: str,
+        matrix2: str,
+        *matrices: str,
+        padding: int = 8
+) -> str:
+    """
+    Принимает строки. Складывает каждую строчку до символа конца строки каждой строки через определенное количество
+    пробелов.
+    padding: принимает количество пробелов.
+    """
+
+    matrices = [m.split('\n') for m in matrices]
+    padding = ' '*padding
+    return '\n'.join(
+        padding.join(row)
+        for row in zip(*matrices)
+    )
