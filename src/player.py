@@ -40,6 +40,16 @@ def get_players_name(flag: bool = False) -> None:
         data.authorized = data.players[0]
 
 
+def get_bot_name(name: str) -> None:
+    """
+    Записывает бота как второго игрока.
+    """
+    if name not in data.players_db:
+        data.players_db[name] = {'побед': 0, 'поражений': 0, 'ничьих': 0}
+        utils.write_players()
+    data.players += [name]
+
+
 def update_stats(players: list[str]):
     if not players:
         for name in data.players:
