@@ -173,16 +173,16 @@ def concatenate_rows(
         matrix1: str,
         matrix2: str,
         *matrices: str,
-        padding: int = 8
+        padding: int = 0
 ) -> str:
     """
     Принимает строки. Складывает каждую строчку до символа конца строки каждой строки через определенное количество
     пробелов.
     padding: принимает количество пробелов.
     """
-
+    matrices = matrix1, matrix2, *matrices
     matrices = [m.split('\n') for m in matrices]
-    padding = ' '*padding
+    padding = ' ' * padding
     return '\n'.join(
         padding.join(row)
         for row in zip(*matrices)
