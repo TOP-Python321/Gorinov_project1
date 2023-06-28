@@ -1,6 +1,9 @@
 """
 Настройка партии и игровой процесс.
 """
+# стандартная библиотека
+from shutil import get_terminal_size
+# проект
 import data
 import player
 import utils
@@ -29,7 +32,8 @@ def game(flag: bool = False) -> list[str] | None:
         # добавил вывод игрового поля, т.к. при загрузке существующей партии неизвестно какие поля заняты без
         # вывода игрового поля
         if flag:
-            print(data.field.format(*(data.board | data.turns).values()))
+            print_board()
+            # print(data.field.format(*(data.board | data.turns).values()))
             flag = False
         o = t % 2
 
@@ -41,7 +45,8 @@ def game(flag: bool = False) -> list[str] | None:
             data.turns = {}
             return None
         data.turns[turn] = data.TOKENS[o]
-        print(data.field.format(*(data.board | data.turns).values()))
+        # print(data.field.format(*(data.board | data.turns).values()))
+        print_board(o)
         for elem in data.winning_combinations:
             if (elem <= set(tuple(data.turns)[::2]) or
                 elem <= set(tuple(data.turns)[1::2])
@@ -77,6 +82,28 @@ def load(players: tuple[str, str], save: dict) -> None:
     data.players = list(players)
     data.turns = save['turns']
     utils.change_dim(save['dim'])
+
+
+def print_board(right: bool = False) -> None:
+    """
+    Выводит в stdout игровое поле. При условии data.DEBUG = True выводит отладочные игровые поля.
+    :param right: По умолчанию выравнивает игровое поле по левой стороне, иначе по правой стороне.
+    :return: None
+    """
+    board = data.field.format(*(data.board | data.turns).values())
+    if data.DEBUG:
+        matr = bot.vectorization(data.debug_data.get('result'))
+        cw = max(len(str(n)) for n in matr)
+        matr = utils.field_template(cw).format(*matr)
+        board = utils.concatenate_rows(board, matr)
+
+    if right:
+        terminal_width = get_terminal_size()[0] - 1
+        margin = terminal_width - max(len(line) for line in board.split())
+        margin = '\n'.join(' '*margin for _ in board.split())
+        board = utils.concatenate_rows(margin, board, padding=0)
+
+    print(board)
 
 
 def clear() -> None:
