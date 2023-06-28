@@ -18,11 +18,12 @@ Matrix = Sequence[Series]
 
 def easy_mode() -> int:
     """Возвращает номер случайной свободной клетки игрового поля."""
+    return choice(list(set(data.board) - set(data.turns)))
 
 
 def hard_mode() -> int:
     """Вычисляет наиболее выигрышный ход и возвращает номер клетки для этого хода."""
-    bot_token_index = data.players.index('#2')
+    bot_token_index = data.players.index('БотС')
     tw = weights_tokens(bot_token_index)
     if data.DEBUG:
         data.debug_data |= {'tokens': tw}
