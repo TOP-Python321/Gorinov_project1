@@ -7,6 +7,7 @@ from shutil import get_terminal_size
 import data
 import player
 import utils
+import bot
 
 
 def get_human_turn() -> int | None:
@@ -28,6 +29,10 @@ def game(flag: bool = False) -> list[str] | None:
     """Контроллер игрового процесса."""
     data.field = utils.field_template()
     data.winning_combinations = utils.counts_combinations(data.dim)
+    data.START_MATRICES = (
+        bot.calc_sm_cross(),
+        bot.calc_sm_zero()
+    )
     for t in range(len(data.turns), data.all_cells):
         # добавил вывод игрового поля, т.к. при загрузке существующей партии неизвестно какие поля заняты без
         # вывода игрового поля
@@ -36,8 +41,12 @@ def game(flag: bool = False) -> list[str] | None:
             # print(data.field.format(*(data.board | data.turns).values()))
             flag = False
         o = t % 2
-
-        turn = get_human_turn()
+        if data.players[o] == 'БотЛ':
+            turn = bot.easy_mode()
+        elif data.players[o] == 'БотС':
+            turn = bot.hard_mode()
+        else:
+            turn = get_human_turn()
         if turn is None:
             # сохранение незавершенной партии
             utils.save_game()
@@ -47,6 +56,7 @@ def game(flag: bool = False) -> list[str] | None:
         data.turns[turn] = data.TOKENS[o]
         # print(data.field.format(*(data.board | data.turns).values()))
         print_board(o)
+        # !!!добавить условие для проверки!!!
         for elem in data.winning_combinations:
             if (elem <= set(tuple(data.turns)[::2]) or
                 elem <= set(tuple(data.turns)[1::2])
@@ -67,12 +77,17 @@ def game_mode() -> None:
     Запрашивает режим игры. Если введена пустая строка добавляет бота как второго игрока, иначе запрашивает имя второго
     игрока.
     """
-    inp = input(f"{data.MESSAGES['режим игры']}{data.PROMPT}")
-    if inp:
-        player.get_players_name()
-    else:
-        # !!!здесь будет добавление бота !!!
-        print('игра с ботом')
+    while True:
+        inp = input(f"{data.MESSAGES['режим игры']}{data.PROMPT}")
+        if not inp:
+            player.get_players_name()
+            break
+        elif inp == '1':
+            player.get_bot_name('БотЛ')
+            break
+        elif inp == '2':
+            player.get_bot_name('БотС')
+            break
 
 
 def load(players: tuple[str, str], save: dict) -> None:
@@ -101,7 +116,7 @@ def print_board(right: bool = False) -> None:
         terminal_width = get_terminal_size()[0] - 1
         margin = terminal_width - max(len(line) for line in board.split())
         margin = '\n'.join(' '*margin for _ in board.split())
-        board = utils.concatenate_rows(margin, board, padding=0)
+        board = utils.concatenate_rows(margin, board)
 
     print(board)
 
