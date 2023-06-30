@@ -73,5 +73,8 @@ winning_combinations = ()
 # словарь координат игрового поля c пробелами
 board = dict.fromkeys(range(1, all_cells + 1), ' ')
 
+# Словарь координат игрового поля с координатами
+dict_board = {}
+
 # шаблон игрового поля
 field = ''
