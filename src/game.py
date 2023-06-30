@@ -10,11 +10,14 @@ import utils
 import bot
 
 
-def get_human_turn() -> int | None:
+def get_human_turn(flag) -> int | None:
+    """Запрашивает координаты игрового поля. При получении 'help' вызывает функцию print_board()"""
     while True:
         turn = input(f"{data.MESSAGES['ход']}{data.PROMPT}")
         if not turn:
             return None
+        if turn == 'help':
+            print_board(right=flag, switch=True)
         try:
             turn = int(turn)
         except ValueError:
@@ -29,6 +32,7 @@ def game(flag: bool = False) -> list[str] | None:
     """Контроллер игрового процесса."""
     data.field = utils.field_template()
     data.winning_combinations = utils.counts_combinations(data.dim)
+    data.dict_board = dict(zip(range(1, data.all_cells + 1), range(1, data.all_cells + 1)))
     data.START_MATRICES = (
         bot.calc_sm_cross(),
         bot.calc_sm_zero()
@@ -38,7 +42,6 @@ def game(flag: bool = False) -> list[str] | None:
         # вывода игрового поля
         if flag:
             print_board()
-            # print(data.field.format(*(data.board | data.turns).values()))
             flag = False
         o = t % 2
         if data.players[o] == 'БотЛ':
@@ -46,7 +49,7 @@ def game(flag: bool = False) -> list[str] | None:
         elif data.players[o] == 'БотС':
             turn = bot.hard_mode()
         else:
-            turn = get_human_turn()
+            turn = get_human_turn(o)
         if turn is None:
             # сохранение незавершенной партии
             utils.save_game()
@@ -54,7 +57,6 @@ def game(flag: bool = False) -> list[str] | None:
             data.turns = {}
             return None
         data.turns[turn] = data.TOKENS[o]
-        # print(data.field.format(*(data.board | data.turns).values()))
         print_board(o)
         # !!!добавить условие для проверки!!!
         for elem in data.winning_combinations:
@@ -74,8 +76,10 @@ def game(flag: bool = False) -> list[str] | None:
 
 def game_mode() -> None:
     """
-    Запрашивает режим игры. Если введена пустая строка добавляет бота как второго игрока, иначе запрашивает имя второго
-    игрока.
+    Запрашивает режим игры. При получении пустой строки вызывает функцию запроса имени  второго игрока
+    (player.get_players_name()),
+    при получении '1' добавляет легкого бота вторым игроком,
+    при получении '2' добавляет сложного бота вторым игроком.
     """
     while True:
         inp = input(f"{data.MESSAGES['режим игры']}{data.PROMPT}")
@@ -99,13 +103,21 @@ def load(players: tuple[str, str], save: dict) -> None:
     utils.change_dim(save['dim'])
 
 
-def print_board(right: bool = False) -> None:
+def print_board(right: bool = False, switch: bool = False) -> None:
     """
     Выводит в stdout игровое поле. При условии data.DEBUG = True выводит отладочные игровые поля.
     :param right: По умолчанию выравнивает игровое поле по левой стороне, иначе по правой стороне.
+    :param switch: При передаче True - выводит на печать игровое поле с координатами и занятыми ячейками.
+                    По умолчинию выводит игровое поле.
     :return: None
     """
-    board = data.field.format(*(data.board | data.turns).values())
+    if switch:
+        data_width = max(len(str(n)) for n in (data.dict_board | data.turns).values())
+        board = utils.field_template(data_width).format(*(f'{n:>{data_width}}' for n in
+                                                          (data.dict_board | data.turns).values()))
+    else:
+        board = data.field.format(*(data.board | data.turns).values())
+
     if data.DEBUG:
         matr = bot.vectorization(data.debug_data.get('result'))
         cw = max(len(str(n)) for n in matr)
