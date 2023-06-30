@@ -4,6 +4,7 @@
 
 # стандартная библиотека
 from configparser import ConfigParser
+from shutil import get_terminal_size
 import configparser
 
 
@@ -201,8 +202,8 @@ def table_result() -> None:
 
     columns = ''.join(f"{column:<{width +5}}" for column in list_columns)
     separator = f"{'=' * (width+5) * 4}"
-    list_str = []
 
+    list_str = []
     for key, val in data.players_db.items():
         list_line = ''
         for elem in val.values():
@@ -210,3 +211,28 @@ def table_result() -> None:
         list_str += [f"{key:<{width +5}}" + list_line + '\n']
 
     print(f'\n{columns}\n'f'{separator}\n'f"{''.join(list_str)}")
+
+
+def important_message(list_text: list[str], align: str = '<') -> str:
+    """
+    Возвращает сгенерированную строку полученную из атрибута list_text
+    """
+    col = get_terminal_size()[0] - 1
+    str_outer = f"#{'=' * (col - 2)}#"
+    str_space = f"#{' ' * (col - 2)}#"
+    content = []
+    for line in list_text:
+        if line != '\n':
+            # если строка не вмещается по ширине в окно терминала, строка переносится с табуляцией(если исходная строка
+            # имела табуляцию
+            space = line.count('    ')
+            line = line.rstrip('\n')
+            line = line.replace('    ', '')
+            while len(line) > 0:
+                line = '    '*space + line
+                content.append(f"#{line[:col - 6]:{align}{(col - 2)}}#")
+                line = line[(col - 6):]
+        else:
+            content.append(str_space)
+
+    return '\n'.join([str_outer, str_space, '\n'.join(content), str_space, str_outer])
