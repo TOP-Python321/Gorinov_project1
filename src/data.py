@@ -11,6 +11,7 @@ from re import compile
 
 PLAYERS_PATH = Path(r'..\data\players.ini')
 SAVES_PATH = Path(r'..\data\saves.txt')
+HELP_PATH = Path(r'..\data\help.txt')
 
 DEBUG = False
 debug_data = {}
@@ -29,7 +30,8 @@ MESSAGES = {
     'некорректная размерность': 'размер поля должен находится в диапазоне от 3 до 20',
     'выигрыш': 'выиграл',
     'ничья': 'ничья',
-    'номер партии': 'введите номер партии, который желаете загрузить'
+    'номер партии': 'введите номер партии, доступной для загрузки',
+    'титры': ['Игра', 'КРЕСТИКИ - НОЛИКИ']
 }
 
 
@@ -43,7 +45,8 @@ COMMANDS = {
     'выйти': ('quit', 'q', 'выход', 'в')
 }
 
-
+HELP = []
+HELP_COMMAND = []
 NAME_PATTERN = compile(r'[A-Za-zА-ЯЁа-яё][A-Za-zА-ЯЁа-яё\d_]+')
 DIM_PATTERN = compile(r'[3-9]|1[0-9]|20')
 
