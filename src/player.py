@@ -30,8 +30,8 @@ def get_players_name(flag: bool = False) -> None:
     if name not in data.players_db:
         data.players_db[name] = {'побед': 0, 'поражений': 0, 'ничьих': 0}
         utils.write_players()
-        # !!!написать вывод помощи!!!
-        # help.full()
+        print(utils.important_message(data.HELP))
+
     if flag:
         data.players = [name]
         data.authorized = [name]
