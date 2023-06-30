@@ -14,10 +14,12 @@ import game
 
 # 1. Чтение файлов данных.
 utils.read_save()
+data.HELP = help.read_help()
+data.HELP_COMMAND = help.read_command(data.HELP)
 
 # 2. ЕСЛИ первый запуск:
 if not utils.read_players():
-    print('Игра ХО')
+    print(utils.important_message(data.MESSAGES['титры'], '^'))
     # вывод титров
 
 # 3. Запрос имени игрока
@@ -50,7 +52,7 @@ while True:
             utils.write_players()
 
     elif command in data.COMMANDS['отобразить раздел помощи']:
-        ...
+        print(utils.important_message(data.HELP))
 
     elif command in data.COMMANDS['создать или переключиться на игрока']:
         player.get_players_name(True)
@@ -64,7 +66,8 @@ while True:
     elif command in data.COMMANDS['выйти']:
         utils.write_saves()
         break
-
+    else:
+        print(utils.important_message(data.HELP_COMMAND))
     # !!!отобразить раздел помощи при вводе неправильной команды!!!
     # КОММЕНТАРИЙ: да, но желательно не весь — при вводе неправильной команды информация, например, о правилах игры не сильно поможет
 
