@@ -14,9 +14,12 @@ def name_input() -> str:
     """
     while True:
         name = input(f' {data.MESSAGES["ввод имени"]}{data.PROMPT}')
-        if data.NAME_PATTERN.fullmatch(name):
-            return name
-        print(f'{data.MESSAGES["некорректное имя"]}')
+        if name in data.players:
+            print(f' \n{data.MESSAGES["ошибка имени"]}\n')
+        else:
+            if data.NAME_PATTERN.fullmatch(name):
+                return name
+            print(f'\n{data.MESSAGES["некорректное имя"]}\n')
 
 
 def get_players_name(flag: bool = False) -> None:
