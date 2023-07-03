@@ -34,7 +34,7 @@ def get_players_name(flag: bool = False) -> None:
 
     if flag:
         data.players = [name]
-        data.authorized = [name]
+        data.authorized = name
     else:
         data.players += [name]
         data.authorized = data.players[0]

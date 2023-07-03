@@ -5,7 +5,6 @@
 # стандартная библиотека
 from configparser import ConfigParser
 from shutil import get_terminal_size
-import configparser
 
 
 # проект
@@ -54,7 +53,8 @@ def read_save() -> None:
                     'turns': {
                         int(turn): data.TOKENS[i % 2]
                         for i, turn in enumerate(turns.split(','))
-                    },
+                        # условие при пустом turns
+                    } if turns else {},
                 }
             }
 
@@ -123,29 +123,6 @@ def counts_combinations(dim: int) -> tuple[set[int]]:
     list_com.append(set(list_ref[::dim+1]))
 
     return tuple(list_com)
-
-
-def output_coordinates(dim: int) -> str:
-    """
-    Формирует и возвращает игровое поле с координатами в виде объекта str.
-    """
-    # СДЕЛАТЬ: при почти полном повторении кода из предыдущей функции вам обязательно должна была прийти в голову мысль о том, что это неоптимально, и что надо бы как-то использовать уже написанную функцию (возможно, немного её доработав) — подумайте всё-таки в эту сторону
-    field = []
-    count = 1
-    width_num = len(str(dim * dim))
-
-    for _ in range(dim):
-        strs = ''
-        for _ in range(dim):
-            str_lin = str(count)
-            # ИСПРАВИТЬ: пробел является заполнителем по умолчанию, поэтому может быть опущен в f-строке
-            strs += ' ' f"{str_lin:^{width_num}}" + ' |'
-            count += 1
-        field.append(strs.rstrip('|'))
-        col_sep = '\n' + '—' * ((width_num + 3)*dim - 1) + '\n'
-        field_out = col_sep.join(field)
-
-    return field_out
 
 
 def field_template(data_width: int = None) -> str:
