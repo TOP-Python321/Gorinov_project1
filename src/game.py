@@ -118,17 +118,25 @@ def print_board(right: bool = False, switch: bool = False) -> None:
     else:
         board = data.field.format(*(data.board | data.turns).values())
 
-    if data.DEBUG:
-        matr = bot.vectorization(data.debug_data.get('result'))
+    # добавил проверку, если первым ходил не бот выходила ошибка
+    if data.DEBUG and data.players[right] == 'БотС':
+        matr = bot.vectorization(data.debug_data.get('empty'))
         cw = max(len(str(n)) for n in matr)
         matr = utils.field_template(cw).format(*matr)
-        board = utils.concatenate_rows(board, matr)
+        board = utils.concatenate_rows(board, matr, padding=8)
 
     if right:
-        terminal_width = get_terminal_size()[0] - 1
-        margin = terminal_width - max(len(line) for line in board.split())
-        margin = '\n'.join(' '*margin for _ in board.split())
-        board = utils.concatenate_rows(margin, board)
+        # условие для вывода отладочного поля справа для бота
+        if data.DEBUG:
+            terminal_width = get_terminal_size()[0] - 1
+            margin = terminal_width - max(len(line) for line in board.split('\n'))
+            margin = '\n'.join(' ' * margin for _ in board.split('\n'))
+            board = utils.concatenate_rows(margin, board)
+        else:
+            terminal_width = get_terminal_size()[0] - 1
+            margin = terminal_width - max(len(line) for line in board.split())
+            margin = '\n'.join(' '*margin for _ in board.split())
+            board = utils.concatenate_rows(margin, board)
 
     print(board)
 
